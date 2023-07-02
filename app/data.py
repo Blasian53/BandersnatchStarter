@@ -1,10 +1,11 @@
 # Imports Libraries
 from os import getenv
-from certifi import where
 from dotenv import load_dotenv
 from MonsterLab import Monster
 from pandas import DataFrame
 from pymongo import MongoClient
+from certifi import where
+
 
 # Creates Database class
 class Database:
@@ -28,7 +29,7 @@ class Database:
 
     # Resets the entire database
     def reset(self):
-        self.client.drop_database(self.name)
+        self.monsters = []
 
     # Returns total number of documents in database
     def count(self) -> int:
@@ -56,5 +57,6 @@ db.count()
 db.dataframe()
 db.html_table()
 db.reset()
+db.count()
 
 
