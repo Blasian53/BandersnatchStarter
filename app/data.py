@@ -46,6 +46,6 @@ class Database:
         else:
             return df.to_html()
 
-
+# Calls Database and fills it with 1500 random monsters
 db = Database()
 db.seed(amount=1500)
