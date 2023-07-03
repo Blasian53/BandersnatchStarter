@@ -15,16 +15,14 @@ class Database:
     # Creates class variable to keep track of all monster entries
     monsters = []
 
-    # Connects to Mongo Database
-    def __init__(self, uri=getenv("DB_URL"), port=27017, database_name=None):
-        self.client = MongoClient(uri, port)
-        self.name = database_name
+    # Creates collection
+    def __init__(self, uri=getenv("DB_URL"), collection=None):
+        self.database = MongoClient(uri, tlsCAFile=where())["Labs"]
 
     # Gathers specified number of documents from the Monster library
     def seed(self, amount):
         for i in range(0, amount):
             self.monsters.append(Monster().to_dict())
-        print(self.monsters)
         return self.monsters
 
     # Resets the entire database
@@ -33,13 +31,11 @@ class Database:
 
     # Returns total number of documents in database
     def count(self) -> int:
-        print(len(self.monsters))
         return len(self.monsters)
 
     # Creates a dataframe out of entire database
     def dataframe(self) -> DataFrame:
         df = DataFrame(self.monsters)
-        print(df.head())
         return df
 
     # Creates a html table from dataframe, if empty then None
@@ -48,15 +44,8 @@ class Database:
         if df.empty:
             return None
         else:
-            print(df.to_html())
-
-print(Monster())
-db = Database("First")
-db.seed(amount=5)
-db.count()
-db.dataframe()
-db.html_table()
-db.reset()
-db.count()
+            return df.to_html()
 
 
+db = Database()
+db.seed(amount=1500)
