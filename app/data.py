@@ -16,7 +16,7 @@ class Database:
     monsters = []
 
     # Creates collection
-    def __init__(self, uri=getenv("DB_URL"), collection=None):
+    def __init__(self, uri=getenv("DB_URL")):
         self.database = MongoClient(uri, tlsCAFile=where())["Labs"]
 
     # Gathers specified number of documents from the Monster library
@@ -45,6 +45,7 @@ class Database:
             return None
         else:
             return df.to_html()
+
 
 # Calls Database and fills it with 1500 random monsters
 db = Database()
