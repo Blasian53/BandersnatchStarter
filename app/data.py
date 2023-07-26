@@ -5,6 +5,7 @@ from MonsterLab import Monster
 from pandas import DataFrame
 from pymongo import MongoClient
 from certifi import where
+import random
 
 
 # Creates Database class
@@ -52,5 +53,5 @@ if __name__ == '__main__':
 # Calls Database and fills it with 1500 random monsters
     db = Database("Monsters")
     db.reset()
-    db.seed(amount=1500)
+    db.seed(amount=random.randint(1000,3000))
     print(db.count())

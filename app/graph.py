@@ -8,7 +8,9 @@ def chart(df, x, y, target) -> Chart:
         background='#686665',
         height=500,
         width=500,
-    ).configure_title(fontSize=24).mark_circle(size=100).encode(
+    ).configure_title(
+        fontSize=24
+    ).mark_circle(size=100).encode(
         x=x,
         y=y,
         color=target,
