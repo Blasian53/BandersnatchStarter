@@ -1,10 +1,20 @@
+import pandas as pd
+import numpy as np
+from data import Database
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
+
 class Machine:
 
     def __init__(self, df):
-        pass
+        self.df = df
+        target = df["Rarity"]
+        features = df.drop(columns="Rarity")
+        self.model =
+        self.model.fit(features, target)
+
 
     def __call__(self, feature_basis):
-        pass
+        prediction, *_ = self.model.predict(feature_basis)
 
     def save(self, filepath):
         pass
