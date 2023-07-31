@@ -19,25 +19,30 @@ class Machine:
         features = df.drop(columns="Rarity")
 
 # Creates 3 different models
-        self.model1 = RandomForestClassifier()
-        self.model2 = LogisticRegression()
-        self.model3 = KNeighborsClassifier()
+        self.RF_model = RandomForestClassifier()
+        self.LR_model = LogisticRegression()
+        self.KNN_model = KNeighborsClassifier()
 
 # Trains All The Models
-        self.model1.fit(features, target)
-        self.model2.fit(features, target)
-        self.model3.fit(features, target)
+        self.RF_model.fit(features, target)
+        self.LR_model.fit(features, target)
+        self.KNN_model.fit(features, target)
 
-# Gets the prediction for the model
+# Gets the prediction for each model
     def __call__(self, feature_basis):
         prediction, *_ = self.model.predict(feature_basis)
 
+# Saves each model to respective filepath
     def save(self, filepath):
-        joblib.dump(self.model, filepath)
+        joblib.dump(self.RF_model, "RF_model.joblib")
+        joblib.dump(self.LR_model, "LR_model.joblib")
+        joblib.dump(self.KNN_model, "KNN_model.joblib")
 
+# Allows user to open specific model
     @staticmethod
     def open(filepath):
         joblib.load(filepath)
 
+# Displays info on
     def info(self):
         pass
