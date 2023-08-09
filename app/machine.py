@@ -1,47 +1,37 @@
 # Import Libraries
 from data import Database
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 import joblib
-from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+import datetime
 
 class Machine:
 # Create Model and fit it
     def __init__(self, df):
         self.df = df
 
-        encoder = LabelEncoder()
+        scaler = StandardScaler()
 
 # Creates x and y
-        self.target = encoder.fit_transform(df["Rarity"])
-        self.features = df.drop(columns="Rarity")
-        print("Target unique values after label encoding:", set(self.target))
-        print("Features information:")
-        print(self.features.info())
+        y = df["Rarity"]
+        X = df[["Level", "Health", "Energy", "Sanity"]]
 
-# Creates 3 different models
-        self.RF_model = RandomForestClassifier()
-        self.LR_model = LogisticRegression()
-        self.KNN_model = KNeighborsClassifier()
+        X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
 
-# Trains All The Models
-        self.RF_model.fit(self.features, self.target)
-        self.LR_model.fit(self.features, self.target)
-        self.KNN_model.fit(self.features, self.target)
+# Creates model
+        self.RF_model = RandomForestClassifier(n_estimators=100, max_depth=20, n_jobs=-1, random_state=42)
+
+# Trains The Models
+        self.RF_model.fit(X_train, y_train)
 
 # Gets the prediction for each model
     def __call__(self, feature_basis):
-        self.RF_pred = self.RF_model.predict(feature_basis)
-        self.LR_pred = self.LR_model.predict(feature_basis)
-        self.KNN_pred = self.KNN_model.predict(feature_basis)
+        return self.RF_model.predict(feature_basis)
 
 # Saves each model to respective filepath
     def save(self, filepath):
-        joblib.dump(self.RF_model, "RF_model.joblib")
-        joblib.dump(self.LR_model, "LR_model.joblib")
-        joblib.dump(self.KNN_model, "KNN_model.joblib")
+        joblib.dump(self.RF_model, "model.joblib")
 
 # Allows user to open specific model
     @staticmethod
@@ -50,13 +40,19 @@ class Machine:
 
 # Displays info on each model
     def info(self):
-        RF_score = accuracy_score(self.target, self.RF_pred)
-        LR_score = accuracy_score(self.target, self.LR_pred)
-        KNN_score = accuracy_score(self.target, self.KNN_pred)
-        print(RF_score)
-        print(LR_score)
-        print(KNN_score)
+        print("Base Model: Random Forest Classifier")
+        print(f"{datetime.datetime.now()}")
+
 
 db = Database("Monsters").dataframe()
 test = Machine(db)
 test.info()
+
+
+"""
+I trained 3 different models, RandomForestClassifier, LogisticRegression, and KNeighborsClassifier.
+I then tuned each of them using a for loop which changed the parameters for each one and compared the accuracy score.
+Upon further analysis i concluded that the RandomForestClassifer was the best model for this project.
+It had a 80% accuracy score compared to the 60% from the LogisticRegression and the
+72% from the KNeighborsClassifier.
+"""
