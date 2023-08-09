@@ -6,34 +6,35 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 import datetime
 
+
 class Machine:
-# Create Model and fit it
+    # Create Model and fit it
     def __init__(self, df):
         self.df = df
 
         scaler = StandardScaler()
 
-# Creates x and y
+# Creates x and y and splits it
         y = df["Rarity"]
-        X = df[["Level", "Health", "Energy", "Sanity"]]
+        x = df[["Level", "Health", "Energy", "Sanity"]]
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
+        x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=42)
 
-# Creates model
+# Creates model with best params
         self.RF_model = RandomForestClassifier(n_estimators=100, max_depth=20, n_jobs=-1, random_state=42)
 
 # Trains The Models
-        self.RF_model.fit(X_train, y_train)
+        self.RF_model.fit(x_train, y_train)
 
-# Gets the prediction for each model
+# Gets the prediction for the model
     def __call__(self, feature_basis):
         return self.RF_model.predict(feature_basis)
 
-# Saves each model to respective filepath
+# Saves the model
     def save(self, filepath):
         joblib.dump(self.RF_model, "model.joblib")
 
-# Allows user to open specific model
+# Allows user to open model
     @staticmethod
     def open(filepath):
         return joblib.load(filepath)
