@@ -36,12 +36,12 @@ class Machine:
 # Allows user to open specific model
     @staticmethod
     def open(filepath):
-        joblib.load(filepath)
+        return joblib.load(filepath)
 
 # Displays info on each model
     def info(self):
         print("Base Model: Random Forest Classifier")
-        print(f"{datetime.datetime.now()}")
+        print(f"Timestamp:", datetime.datetime.now().strftime("%Y-%m-%d %I:%M:%S %p"))
 
 
 db = Database("Monsters").dataframe()
